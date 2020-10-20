@@ -1,8 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Amplify, { Auth } from 'aws-amplify';
+
+Amplify.configure({
+  Auth: {
+    identityPoolId: 'us-east-1:b91a29ee-b171-4d24-b545-81f97dce9e2e',
+    userPoolId: 'us-east-1_PfkVUegdd',
+    userPoolWebClientId: 'aei92dlp99djhgs4dnsifohm',
+    region: 'us-east-1'
+  }
+});
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,3 +24,7 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+const currentConfig = Auth.configure();
+
+console.log(currentConfig);
