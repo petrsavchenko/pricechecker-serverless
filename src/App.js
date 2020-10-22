@@ -29,9 +29,9 @@ function App() {
       <Grommet theme={theme} full>
         <ResponsiveContext.Consumer>
           {size => (
-              <Box direction='row' fill>
+            <Box direction='row' fill overflow='hidden'>
                 <Sidebar />
-                <Box fill>
+                <Box fill overflow='auto'>
                   <Switch>
                     <Route path="/" exact component={() => <Home size={size} />} />
                     <Route path="/new" component={New} />
