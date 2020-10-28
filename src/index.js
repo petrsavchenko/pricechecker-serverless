@@ -27,4 +27,6 @@ serviceWorker.unregister();
 
 const currentConfig = Auth.configure();
 
+// Auth.signOut()
+
 console.log(currentConfig);

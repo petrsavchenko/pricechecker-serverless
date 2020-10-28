@@ -42,7 +42,7 @@ function App() {
           )}
         </ResponsiveContext.Consumer>
       </Grommet>
-      </Router>
+    </Router>
   );
 }
 

@@ -68,7 +68,7 @@ export const CrawlerCard = ({crawler}) => (
           </Box>
         </CardBody>
         <CardFooter pad={{horizontal: "small"}} background="light-2">   
-            <Button icon={<Icons.Favorite color="red" />} hoverIndicator />
-            <Button icon={<Icons.ShareOption color="plain" />} hoverIndicator />
+            <Button icon={<Icons.Shop color="red" />} hoverIndicator />
+            <Button icon={<Icons.Link color="plain" />} hoverIndicator placeholder='go to amazon'/>
         </CardFooter>
     </Card>);
