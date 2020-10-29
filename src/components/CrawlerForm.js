@@ -26,7 +26,7 @@ const CrawlerValidationSchema = Yup.object().shape({
     .required('required'),
 });
 
-export const New = ({ name, url, desiredPrice }) => {
+export const CrawlerForm = ({ name, url, desiredPrice }) => {
     const [submitted, setSubmitted] = useState(false);
 
     return <Box align="center">

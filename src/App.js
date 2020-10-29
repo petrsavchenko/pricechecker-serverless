@@ -20,7 +20,7 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 import { theme } from "./theme";
 import { Sidebar } from './components/Sidebar';
 import { Footer } from './components/Footer';
-import { Home, NotFound, New } from './pages'
+import { Home, NotFound, Modify } from './pages'
 
 function App() {
   // const [showSidebar, setShowSidebar] = useState(false);
@@ -34,7 +34,7 @@ function App() {
                 <Box fill overflow='auto'>
                   <Switch>
                     <Route path="/" exact component={() => <Home size={size} />} />
-                    <Route path="/new" component={New} />
+                    <Route path="/new" component={Modify} />
                     <Route component={NotFound} />
                   </Switch>
                 </Box>

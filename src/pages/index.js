@@ -1,3 +1,3 @@
 export * from './Home';
-export * from './New';
-export * from './NotFound';
+export * from './Modify';
+export * from './NotFound'; 
