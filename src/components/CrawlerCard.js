@@ -31,7 +31,7 @@ const getStatusColor = (status) => {
     }
 }
 
-export const CrawlerCard = ({crawler}) => (            
+export const CrawlerCard = ({ crawler }) => (            
     <Card height="medium" width="medium" pad='small' background="light-1">
         <CardHeader 
             pad="medium"
@@ -58,7 +58,7 @@ export const CrawlerCard = ({crawler}) => (
                     >
                         <Text size='medium' color={getStatusColor(crawler.status)}>{crawler.status}</Text> 
                         <Text size='small' color="dark-5" >
-                            ${crawler.price} checked at {crawler.lastCheck?.toLocaleTimeString()}
+                            ${crawler.price} {crawler.lastCheck && `checked at ${new Date(crawler.lastCheck).toLocaleTimeString()}`}
                         </Text>
                     </Box>
                 </Box>

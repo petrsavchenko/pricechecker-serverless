@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
     Card,
     CardHeader,
@@ -11,7 +11,10 @@ import {
 
 import * as Icons from 'grommet-icons';
 
-import {CrawlerCard} from '../components'
+import {CrawlerCard} from '../components';
+
+import { getCrawlers } from "../api";
+
 
 const mockedData = [
     {
@@ -57,14 +60,26 @@ const mockedData = [
     },
 ];
 
-export const Home = ({size}) => (
-    <Grid
+export const Home = ({ size }) => {
+    const [data, setData] = useState([]);
+ 
+    useEffect(() => {
+      const fetchData = async () => {
+        setData(await getCrawlers());
+      };
+   
+      fetchData();
+    }, []);
+
+    console.log(data);
+
+    return <Grid
         columns={size !== 'small' ? 'medium' : '100%'} 
         gap="small"
         pad='small'
     >
-        {mockedData.map((crawler, index) => (
+        {data.map((crawler, index) => (
             <CrawlerCard crawler={crawler}/>
         ))}
     </Grid>
-);
+};

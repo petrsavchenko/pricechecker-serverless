@@ -14,7 +14,7 @@ import {
    ResponsiveContext,
    Nav,
    Anchor
-  } from 'grommet';
+} from 'grommet';
 
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { theme } from "./theme";
