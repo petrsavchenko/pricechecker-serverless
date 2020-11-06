@@ -20,7 +20,11 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 import { theme } from "./theme";
 import { Sidebar } from './components/Sidebar';
 import { Footer } from './components/Footer';
-import { Home, NotFound, Modify } from './pages'
+import { Home, NotFound, Modify } from './pages';
+import { CrawlerForm } from "./components";
+
+const IdPattern = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}';
+const NewPattern = 'new';
 
 function App() {
   // const [showSidebar, setShowSidebar] = useState(false);
@@ -34,7 +38,7 @@ function App() {
                 <Box fill overflow='auto'>
                   <Switch>
                     <Route path="/" exact component={() => <Home size={size} />} />
-                    <Route path="/new" component={Modify} />
+                    <Route path={`/:id(${IdPattern}|${NewPattern})`} component={CrawlerForm} />
                     <Route component={NotFound} />
                   </Switch>
                 </Box>

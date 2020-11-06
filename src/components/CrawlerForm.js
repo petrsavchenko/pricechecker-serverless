@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import {
@@ -14,6 +14,12 @@ import {
   MaskedInput,
 } from "grommet";
 
+import {
+  useParams
+} from "react-router-dom";
+
+import { getCrawler, modifyCrawler } from "../api";
+
 const CrawlerValidationSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'too Short!')
@@ -26,20 +32,33 @@ const CrawlerValidationSchema = Yup.object().shape({
     .required('required'),
 });
 
-export const CrawlerForm = ({ name, url, desiredPrice }) => {
+export const CrawlerForm = () => {
     const [submitted, setSubmitted] = useState(false);
+    const [record, setRecord] = useState({});
+    let { id } = useParams();
+    id = 1;
+
+    useEffect(() => {
+      const fetchData = async () => {
+        setRecord(await getCrawler(id))
+      };
+   
+      fetchData();
+    }, [id]);
 
     return <Box align="center">
         <Box width="large" margin="large">
           <Heading>Set up a crawler</Heading>
           <Formik
-            initialValues={{ name, url, desiredPrice }}
+            enableReinitialize
+            initialValues={{ ...record }}
             validationSchema={CrawlerValidationSchema}
             validateOnBlur={submitted}
             validateOnChange={submitted}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting }) => {
               // whatever submitting the form should entail
-              alert("Submitting\n" + JSON.stringify(values, null, 2));
+              // alert("Submitting\n" + JSON.stringify(values, null, 2));
+              await modifyCrawler(values);
               setSubmitting();
             }}
           >
