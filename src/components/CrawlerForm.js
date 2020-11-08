@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState, useEffect, useContext } from "react";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import {
@@ -19,6 +19,8 @@ import {
 } from "react-router-dom";
 
 import { getCrawler, modifyCrawler } from "../api";
+import { AppContext } from "../appContext";
+
 
 const CrawlerValidationSchema = Yup.object().shape({
   name: Yup.string()
@@ -33,10 +35,11 @@ const CrawlerValidationSchema = Yup.object().shape({
 });
 
 export const CrawlerForm = () => {
+    const [state, dispatch] = useContext(AppContext);
+    console.log(state.crawlers)
     const [submitted, setSubmitted] = useState(false);
     const [record, setRecord] = useState({});
-    let { id } = useParams();
-    id = 1;
+    const { id } = useParams();
 
     useEffect(() => {
       const fetchData = async () => {

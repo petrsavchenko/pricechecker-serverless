@@ -22,6 +22,7 @@ import { Sidebar } from './components/Sidebar';
 import { Footer } from './components/Footer';
 import { Home, NotFound, Modify } from './pages';
 import { CrawlerForm } from "./components";
+import { AppContextProvider } from "./appContext";
 
 const IdPattern = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}';
 const NewPattern = 'new';
@@ -31,6 +32,7 @@ function App() {
   return (
     <Router>
       <Grommet theme={theme} full>
+      <AppContextProvider>
         <ResponsiveContext.Consumer>
           {size => (
             <Box direction='row' fill overflow='hidden'>
@@ -45,6 +47,7 @@ function App() {
             </Box>
           )}
         </ResponsiveContext.Consumer>
+      </AppContextProvider>
       </Grommet>
     </Router>
   );

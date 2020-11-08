@@ -1,26 +1,31 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { Grid } from 'grommet';
 import {CrawlerCard} from '../components';
 import { getCrawlers } from "../api";
+import { AppContext } from "../appContext";
+
 
 export const Home = ({ size }) => {
-    const [data, setData] = useState([]);
+    const [state, dispatch] = useContext(AppContext);
  
     useEffect(() => {
       const fetchData = async () => {
-        setData(await getCrawlers());
+        dispatch({
+          type: "ADD_CRAWLERS",
+          payload: await getCrawlers()
+        });
       };
    
       fetchData();
     }, []);
 
     return <Grid
-        columns={size !== 'small' ? 'medium' : '100%'} 
-        gap="small"
-        pad='small'
-    >
-        {data.map((crawler) => (
-            <CrawlerCard crawler={crawler}/>
-        ))}
-    </Grid>
+          columns={size !== 'small' ? 'medium' : '100%'} 
+          gap="small"
+          pad='small'
+      >
+          {state.crawlers.map((crawler) => (
+            <CrawlerCard key={crawler.id} crawler={crawler}/>
+          ))}
+      </Grid>
 };

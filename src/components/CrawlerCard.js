@@ -17,6 +17,7 @@ import {
 } from "grommet";
 
 import * as Icons from 'grommet-icons';
+import { useHistory } from 'react-router-dom';
 
 const getStatusColor = (status) => {
     switch (status) {
@@ -31,8 +32,11 @@ const getStatusColor = (status) => {
     }
 }
 
-export const CrawlerCard = ({ crawler }) => (            
-    <Card height="medium" width="medium" pad='small' background="light-1">
+export const CrawlerCard = ({ crawler }) => {
+    const history = useHistory();
+    const onClick = path => history.push(path);
+     
+    return <Card height="medium" width="medium" pad='small' background="light-1">
         <CardHeader 
             pad="medium"
             height='small'
@@ -69,8 +73,9 @@ export const CrawlerCard = ({ crawler }) => (
         </CardBody>
         <CardFooter pad={{horizontal: "small"}} background="light-2">   
             <Button icon={<Icons.Trash color="red" />} hoverIndicator placeholder='delete'/>
-            <Button icon={<Icons.Edit color="plain" />} hoverIndicator placeholder='edit'/>
+            <Button icon={<Icons.Edit color="plain" />} hoverIndicator placeholder='edit' onClick={onClick.bind(null, '/9fa25e5e-0b5f-4454-abfa-f9cc70d1b805')} />
             {/* <Button color='brand' size='medium'><strong>DETAILS</strong></Button>  */}
             <Button icon={<Icons.Share color="plain" />} hoverIndicator placeholder='go to amazon'/>
         </CardFooter>
-    </Card>);
+    </Card>;
+};
