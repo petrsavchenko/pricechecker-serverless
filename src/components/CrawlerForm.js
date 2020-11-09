@@ -36,18 +36,19 @@ const CrawlerValidationSchema = Yup.object().shape({
 
 export const CrawlerForm = () => {
     const [state, dispatch] = useContext(AppContext);
-    console.log(state.crawlers)
+
     const [submitted, setSubmitted] = useState(false);
     const [record, setRecord] = useState({});
     const { id } = useParams();
 
     useEffect(() => {
       const fetchData = async () => {
-        setRecord(await getCrawler(id))
+        const crawler = state.crawlers.find(c => c.id === id);
+        setRecord(crawler ?? await getCrawler(id));
       };
    
       fetchData();
-    }, [id]);
+    },[]);
 
     return <Box align="center">
         <Box width="large" margin="large">
@@ -59,9 +60,8 @@ export const CrawlerForm = () => {
             validateOnBlur={submitted}
             validateOnChange={submitted}
             onSubmit={async (values, { setSubmitting }) => {
-              // whatever submitting the form should entail
-              // alert("Submitting\n" + JSON.stringify(values, null, 2));
               await modifyCrawler(values);
+              // dispatch({ type: "ADD_CRAWLER", payload: values })
               setSubmitting();
             }}
           >

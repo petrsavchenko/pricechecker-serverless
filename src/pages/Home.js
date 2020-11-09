@@ -9,13 +9,7 @@ export const Home = ({ size }) => {
     const [state, dispatch] = useContext(AppContext);
  
     useEffect(() => {
-      const fetchData = async () => {
-        dispatch({
-          type: "ADD_CRAWLERS",
-          payload: await getCrawlers()
-        });
-      };
-   
+      const fetchData = async () => dispatch({ type: "ADD_CRAWLERS", payload: await getCrawlers() });
       fetchData();
     }, []);
 
