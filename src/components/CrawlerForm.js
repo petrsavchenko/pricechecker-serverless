@@ -38,17 +38,22 @@ export const CrawlerForm = () => {
     const [state, dispatch] = useContext(AppContext);
 
     const [submitted, setSubmitted] = useState(false);
-    const [record, setRecord] = useState({});
+    const [record, setRecord] = useState({status:'Processing'});
     const { id } = useParams();
+    const isNew = id === 'new';
 
     useEffect(() => {
       const fetchData = async () => {
         const crawler = state.crawlers.find(c => c.id === id);
         setRecord(crawler ?? await getCrawler(id));
       };
-   
-      fetchData();
-    },[]);
+
+      if (isNew) {
+        setRecord({});
+      } else {
+        fetchData();
+      }
+    },[id]);
 
     return <Box align="center">
         <Box width="large" margin="large">
@@ -60,8 +65,12 @@ export const CrawlerForm = () => {
             validateOnBlur={submitted}
             validateOnChange={submitted}
             onSubmit={async (values, { setSubmitting }) => {
+              if (!isNew){
+                dispatch({ type: "UPDATE_CRAWLER", payload: values });
+              } else {
+                dispatch({ type: "ADD_CRAWLER", payload: values });
+              }
               await modifyCrawler(values);
-              // dispatch({ type: "ADD_CRAWLER", payload: values })
               setSubmitting();
             }}
           >
@@ -110,7 +119,7 @@ export const CrawlerForm = () => {
                   justify="between"
                 >
                   <Button size='large' label="Cancel" />
-                  <Button size='large' type="submit" primary label="Create" />
+                  <Button size='large' type="submit" primary label={`${!isNew ? 'Update':'Create'}`}/>
                 </Box>
               </form>
             )}

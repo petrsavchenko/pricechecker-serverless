@@ -8,10 +8,12 @@ import { AppContext } from "../appContext";
 export const Home = ({ size }) => {
     const [state, dispatch] = useContext(AppContext);
  
-    useEffect(() => {
-      const fetchData = async () => dispatch({ type: "ADD_CRAWLERS", payload: await getCrawlers() });
-      fetchData();
-    }, []);
+    // useEffect(() => {
+    //   const fetchData = async () => dispatch({ type: "FETCH_CRAWLERS", payload: await getCrawlers() });
+    //   if (!state.state) {
+    //     fetchData();
+    //   }
+    // }, []);
 
     return <Grid
           columns={size !== 'small' ? 'medium' : '100%'} 
