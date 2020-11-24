@@ -58,13 +58,14 @@ export const CrawlerCard = ({ crawler }) => {
                     <Heading level="3" margin="none">
                         {crawler.name}
                     </Heading>
-                    <Box 
+                    
+                    {crawler.status && <Box 
                     >
                         <Text size='medium' color={getStatusColor(crawler.status)}>{crawler.status}</Text> 
                         <Text size='small' color="dark-5" >
                             ${crawler.price} {crawler.lastCheck && `checked at ${new Date(crawler.lastCheck).toLocaleTimeString()}`}
                         </Text>
-                    </Box>
+                    </Box>}
                 </Box>
                 <Text color="dark-5" size="large" align="end" justify="betwen">
                     ${crawler.desiredPrice}

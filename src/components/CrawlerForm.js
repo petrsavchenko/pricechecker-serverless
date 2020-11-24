@@ -1,5 +1,7 @@
 import React, { Component, useState, useEffect, useContext } from "react";
 import { Formik } from "formik";
+import { v4 as uuidv4 } from "uuid";
+import { Auth } from "aws-amplify";
 import * as Yup from 'yup';
 import {
   grommet,
@@ -38,7 +40,7 @@ export const CrawlerForm = () => {
     const [state, dispatch] = useContext(AppContext);
 
     const [submitted, setSubmitted] = useState(false);
-    const [record, setRecord] = useState({status:'Processing'});
+    const [record, setRecord] = useState({});
     const { id } = useParams();
     const isNew = id === 'new';
 
@@ -49,7 +51,12 @@ export const CrawlerForm = () => {
       };
 
       if (isNew) {
-        setRecord({});
+        setRecord({
+          id: uuidv4(),
+          status:'Processing',
+          username: Auth.user.username,
+          createdDate: new Date().toISOString()
+        });
       } else {
         fetchData();
       }
@@ -107,6 +114,7 @@ export const CrawlerForm = () => {
                   <MaskedInput
                     name="desiredPrice"
                     placeholder="400"
+                    type='number'
                     mask={[{ regexp: /^[0-9]+$/ }]}
                     value={values.desiredPrice || ""}
                     onChange={handleChange}
