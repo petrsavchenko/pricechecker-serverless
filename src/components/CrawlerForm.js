@@ -1,17 +1,13 @@
-import React, { Component, useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Formik } from "formik";
 import { v4 as uuidv4 } from "uuid";
 import { Auth } from "aws-amplify";
 import * as Yup from 'yup';
 import {
-  grommet,
   Box,
   Button,
-  Grommet,
   FormField,
   Heading,
-  Select,
-  TextArea,
   TextInput,
   MaskedInput,
 } from "grommet";
@@ -19,10 +15,10 @@ import {
 import {
   useParams
 } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
-import { getCrawler, modifyCrawler } from "../api";
+import { getCrawler, putCrawler } from "../api";
 import { AppContext } from "../appContext";
-
 
 const CrawlerValidationSchema = Yup.object().shape({
   name: Yup.string()
@@ -38,6 +34,8 @@ const CrawlerValidationSchema = Yup.object().shape({
 
 export const CrawlerForm = () => {
     const [state, dispatch] = useContext(AppContext);
+    const history = useHistory();
+    const onClick = path => history.push(path);
 
     const [submitted, setSubmitted] = useState(false);
     const [record, setRecord] = useState({});
@@ -53,14 +51,13 @@ export const CrawlerForm = () => {
       if (isNew) {
         setRecord({
           id: uuidv4(),
-          status:'Processing',
           username: Auth.user.username,
           createdDate: new Date().toISOString()
         });
       } else {
         fetchData();
       }
-    },[id]);
+    },[id, isNew, state.crawlers]);
 
     return <Box align="center">
         <Box width="large" margin="large">
@@ -72,22 +69,21 @@ export const CrawlerForm = () => {
             validateOnBlur={submitted}
             validateOnChange={submitted}
             onSubmit={async (values, { setSubmitting }) => {
+              setSubmitting();
               if (!isNew){
                 dispatch({ type: "UPDATE_CRAWLER", payload: values });
               } else {
                 dispatch({ type: "ADD_CRAWLER", payload: values });
               }
-              await modifyCrawler(values);
-              setSubmitting();
+              await putCrawler(values);
+              onClick('/');
             }}
           >
             {({
               values,
               errors,
               handleChange,
-              handleSubmit,
-              setFieldValue
-            }) => (
+              handleSubmit            }) => (
               <form
                 onSubmit={event => {
                   event.preventDefault();
@@ -126,7 +122,7 @@ export const CrawlerForm = () => {
                   direction="row"
                   justify="between"
                 >
-                  <Button size='large' label="Cancel" />
+                  <Button size='large' label="Cancel" onClick={onClick.bind(null, '/')}/>
                   <Button size='large' type="submit" primary label={`${!isNew ? 'Update':'Create'}`}/>
                 </Box>
               </form>

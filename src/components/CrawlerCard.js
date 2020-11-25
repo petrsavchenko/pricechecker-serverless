@@ -1,23 +1,21 @@
-import React, { Component } from "react";
+import React, { useContext } from "react";
 
 import {
   Box,
   Button,
-  Collapsible,
   Image,
   Heading,
-  Paragraph,
   Text,
-  ThemeContext,
   Card,
   CardHeader,
   CardBody,
   CardFooter,
-  Grid,
 } from "grommet";
 
 import * as Icons from 'grommet-icons';
 import { useHistory } from 'react-router-dom';
+import { deleteCrawler } from "../api";
+import { AppContext } from "../appContext";
 
 const getStatusColor = (status) => {
     switch (status) {
@@ -28,16 +26,24 @@ const getStatusColor = (status) => {
         case 'Processing':
             return 'status-warning';
         default:
-            throw new Error('Undefined status');
+            return 'status-unknown';
     }
 }
 
 export const CrawlerCard = ({ crawler }) => {
+    const [, dispatch] = useContext(AppContext);
+
     const history = useHistory();
-    const onClick = path => history.push(path);
+    const onEditClick = path => history.push(path);
+
+    const onDeleteClick = async id => {
+        await deleteCrawler(id);
+        dispatch({ type: "DELETE_CRAWLER", payload: id });
+    }
+    const onExternalClick = url => window.open(url, '_blank');
      
     return <Card height="medium" width="medium" pad='small' background="light-1">
-        <CardHeader 
+        <CardHeader
             pad="medium"
             height='small'
         >
@@ -59,13 +65,14 @@ export const CrawlerCard = ({ crawler }) => {
                         {crawler.name}
                     </Heading>
                     
-                    {crawler.status && <Box 
-                    >
-                        <Text size='medium' color={getStatusColor(crawler.status)}>{crawler.status}</Text> 
+                    <Box>
+                        <Text size='medium' color={getStatusColor(crawler.status)}>{crawler.status ? crawler.status : 'To be processed'}</Text>
+                        {crawler.lastCheck && 
                         <Text size='small' color="dark-5" >
                             ${crawler.price} {crawler.lastCheck && `checked at ${new Date(crawler.lastCheck).toLocaleTimeString()}`}
                         </Text>
-                    </Box>}
+                        }
+                    </Box>
                 </Box>
                 <Text color="dark-5" size="large" align="end" justify="betwen">
                     ${crawler.desiredPrice}
@@ -73,10 +80,10 @@ export const CrawlerCard = ({ crawler }) => {
           </Box>
         </CardBody>
         <CardFooter pad={{horizontal: "small"}} background="light-2">   
-            <Button icon={<Icons.Trash color="red" />} hoverIndicator placeholder='delete'/>
-            <Button icon={<Icons.Edit color="plain" />} hoverIndicator placeholder='edit' onClick={onClick.bind(null, '/9fa25e5e-0b5f-4454-abfa-f9cc70d1b805')} />
+            <Button icon={<Icons.Trash color="red" />} hoverIndicator placeholder='delete' onClick={onDeleteClick.bind(null, crawler.id)}/>
+            <Button icon={<Icons.Edit color="plain" />} hoverIndicator placeholder='edit' onClick={onEditClick.bind(null, `/${crawler.id}`)} />
             {/* <Button color='brand' size='medium'><strong>DETAILS</strong></Button>  */}
-            <Button icon={<Icons.Share color="plain" />} hoverIndicator placeholder='go to amazon'/>
+            <Button icon={<Icons.Share color="plain" />} hoverIndicator placeholder='go to amazon' onClick={onExternalClick.bind(null, crawler.url)}/>
         </CardFooter>
     </Card>;
 };

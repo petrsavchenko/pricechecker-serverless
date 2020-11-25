@@ -1,55 +1,57 @@
 import React, { useReducer, createContext, useEffect } from "react";
 import { getCrawlers } from "./api";
+import { Toast } from "./components/toasts";
 
 export const AppContext = createContext();
 
 const initialState = {
   crawlers: [],
-  loading: false,
-  error: null
+  error: null,
+  notification: null
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case "ADD_CRAWLER":
+      return {
+        ...state,
+        crawlers: [...state.crawlers, action.payload],
+        notification: 'Crawler has been created'
+      };
     case "ADD_CRAWLERS":
       return {
+        ...state,
         crawlers: [...state.crawlers, ...action.payload]
       };
     case "UPDATE_CRAWLER": 
       return {
-        crawlers: state.crawlers.map((crawler, index) => {
+        ...state,
+        crawlers: state.crawlers.map(crawler => {
           if (crawler.id !== action.payload.id) {
-            // This isn't the item we care about - keep it as-is
-            return crawler
+            return crawler;
           }
-      
-          // Otherwise, this is the one we want - return an updated value
+
           return {
             ...crawler,
             ...action.payload
           }
-        })
+        }),
+        notification: 'Your changes have been saved'
       }
-    case "ADD_CRAWLER":
-      return {
-        crawlers: [...state.crawlers, action.payload]
-      };
     case "DELETE_CRAWLER":
       return {
         crawlers: state.crawlers.filter(
-          contact => contact.id !== action.payload
-        )
+          crawler => crawler.id !== action.payload
+        ),
+        notification: 'Crawler has been deleted'
       };
-    case "START":
+    case "CLEAR_NOTIFICATION":
       return {
-        loading: true, 
-      };
-    case "COMPLETE":
-      return {
-        loading: false,
+        ...state,
+        notification: null,
       };
     default:
-      throw new Error();
+      throw new Error('Undefined action type');
   }
 };
 
@@ -58,13 +60,12 @@ export const AppContextProvider = ({children}) => {
 
   useEffect(() => {
     const fetchData = async () => dispatch({ type: "ADD_CRAWLERS", payload: await getCrawlers() });
-    if (!state.state) {
-      fetchData();
-    }
+    fetchData();
   }, []);
 
   return (
     <AppContext.Provider value={[state, dispatch]}>
+      {state.notification && <Toast message={state.notification} onClose={() => dispatch({ type: "CLEAR_NOTIFICATION" })}/>}
       {children}
     </AppContext.Provider>
   );

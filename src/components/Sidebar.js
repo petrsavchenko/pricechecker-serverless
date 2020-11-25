@@ -1,29 +1,20 @@
 import {
     Nav,
-    Anchor,
     Avatar,
     Button,
     Sidebar as SidebarCore,
     Menu,
-    Text,
-    Box
+    Text
 } from 'grommet';
 
 import * as Icons from 'grommet-icons';
-import React,  { useEffect, useState } from 'react';
+import React  from 'react';
 import { Auth } from 'aws-amplify'
 import { useHistory } from 'react-router-dom';
-import { Toast } from './toasts'
-import { Portal } from "./Portal";
-
 
 export const Sidebar = () => {
-
-    const [showToast, setShowToast] = useState(false)
     const history = useHistory();
-
     const onClick = path => history.push(path);
-
     const signOut = async () => {
       try {
           await Auth.signOut();
@@ -47,7 +38,6 @@ export const Sidebar = () => {
             />
         }
       >
-        {showToast && <Portal><Toast onClose={setShowToast.bind(null, !showToast)}/></Portal>}
         <Nav gap='small'>
             <Button icon={<Icons.Add />} hoverIndicator placeholder='new crawler' onClick={onClick.bind(null, '/new')} />
             <Button icon={<Icons.Home />} hoverIndicator onClick={onClick.bind(null, '/')} />
