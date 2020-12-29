@@ -3,14 +3,10 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import Amplify from 'aws-amplify';
+import { AmplifyAuth } from './config';
 
 Amplify.configure({
-  Auth: {
-    identityPoolId: 'us-east-1:b91a29ee-b171-4d24-b545-81f97dce9e2e',
-    userPoolId: 'us-east-1_PfkVUegdd',
-    userPoolWebClientId: 'aei92dlp99djhgs4dnsifohm',
-    region: 'us-east-1'
-  }
+  Auth: AmplifyAuth
 });
 
 ReactDOM.render(
